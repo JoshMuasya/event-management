@@ -100,7 +100,7 @@ const MainDashboard = () => {
                     <p className="text-sm md:text-md mb-4" style={{ color: "#FFFFFF", fontFamily: "'Lora', serif'" }}>
                         Received: {dashboardData.gifts.totalReceived} | Thanked: {dashboardData.gifts.thankYouSent}
                     </p>
-                    <Link href="/dashboard/gift-tracking">
+                    <Link href="/gift-tracking">
                         <motion.button
                             className="px-4 py-2 bg-[#FAA722] text-black rounded-md font-bold"
                             whileHover={{ scale: 1.05 }}
