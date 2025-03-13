@@ -135,7 +135,7 @@ const MainDashboard = () => {
                     <p className="text-sm md:text-md mb-4" style={{ color: "#FFFFFF", fontFamily: "'Lora', serif'" }}>
                         Responded: {dashboardData.rsvps.responded} | Pending: {dashboardData.rsvps.pending}
                     </p>
-                    <Link href="/dashboard/rsvp-management">
+                    <Link href="/rsvp-management">
                         <motion.button
                             className="px-4 py-2 bg-[#FAA722] text-black rounded-md font-bold"
                             whileHover={{ scale: 1.05 }}
