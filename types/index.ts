@@ -64,6 +64,7 @@ export interface GuestTableProps {
     onEdit: (guest: Guest) => void;
     onDelete: (id: string) => void;
     onGuestsUpdate: (newGuests: Guest[]) => void;
+    onCheckIn: (id: string) => void;
 }
 
 export interface RawGuestData {
