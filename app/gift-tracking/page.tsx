@@ -1,10 +1,10 @@
-import GiftManagement from '@/components/GiftManagement'
+import ComingSoon from '@/components/ComingSoon'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <GiftManagement />
+      <ComingSoon />
     </div>
   )
 }

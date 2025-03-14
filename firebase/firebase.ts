@@ -5,13 +5,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB2h00t4vs990tRBD5435EyCcla4ovbN0o",
-    authDomain: "twilight-luxe-creations.firebaseapp.com",
-    projectId: "twilight-luxe-creations",
-    storageBucket: "twilight-luxe-creations.firebasestorage.app",
-    messagingSenderId: "235817647528",
-    appId: "1:235817647528:web:5ef24d27e51d755690f19d",
-    measurementId: "G-MNR7F2KEN0"
+    apiKey: "AIzaSyCd3ou6BgFF5_xiLUqw9DUajqlXIzhaiQE",
+    authDomain: "twilight-luxe-creations-d9864.firebaseapp.com",
+    projectId: "twilight-luxe-creations-d9864",
+    storageBucket: "twilight-luxe-creations-d9864.firebasestorage.app",
+    messagingSenderId: "443783303819",
+    appId: "1:443783303819:web:d7a4b9b7611e436c2f3a8e",
+    measurementId: "G-J9QNB8S3GW"
 };
 
 const app = initializeApp(firebaseConfig);

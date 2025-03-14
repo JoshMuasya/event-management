@@ -2,19 +2,18 @@
 
 import React from 'react'
 import ReportDashboard from './ReportDashboard'
-import { EventData } from '@/types';
 
 const Reports = () => {
-    const sampleEventData: EventData = {
-        totalRSVPs: 100, totalAttendees: 80, peakAttendanceTime: "7:00 PM",
-        guestBreakdown: {}
-    };
+
+    const handleExport = (format: "pdf" | "excel") => {
+        console.log(`Exporting report as ${format}`);
+        // Implement actual export logic here
+      };
 
     return (
         <div>
             <ReportDashboard
-                data={sampleEventData}
-                onExport={(format) => console.log(`Export ${format}`)} />
+                onExport={handleExport} />
         </div>
     )
 }

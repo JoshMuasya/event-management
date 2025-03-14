@@ -1,10 +1,10 @@
-import GuestListManagement from '@/components/GuestManger'
+import ComingSoon from '@/components/ComingSoon'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <GuestListManagement />
+      <ComingSoon />
     </div>
   )
 }

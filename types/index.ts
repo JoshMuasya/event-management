@@ -2,10 +2,10 @@ export interface Guest {
     id: string;
     name: string;
     email: string;
-    phone: string;
-    tags: string[];
-    rsvpStatus: 'yes' | 'no' | 'maybe' | 'pending';
-    checkInStatus: 'pending' | 'checked-in';
+    phone?: string;
+    tags?: string[];
+    rsvpStatus?: 'yes' | 'no' | 'maybe' | 'pending';
+    checkInStatus?: 'pending' | 'checked-in';
     plusOne?: { name: string; dietary: string };
 }
 
@@ -56,4 +56,20 @@ export interface InvitationFormProps {
     initialData?: Partial<InvitationData> | null;
     onSave: (data: InvitationData) => void;
     theme?: ThemeConfig;
+}
+
+export interface GuestTableProps {
+    guests: Guest[];
+    onAdd: () => void;
+    onEdit: (guest: Guest) => void;
+    onDelete: (id: string) => void;
+    onGuestsUpdate: (newGuests: Guest[]) => void;
+}
+
+export interface RawGuestData {
+    id?: string;
+    name: string;
+    email?: string;
+    number?: string | number; // Excel might parse it as a number
+    [key: string]: unknown;
 }
