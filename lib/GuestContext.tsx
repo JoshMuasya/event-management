@@ -8,9 +8,9 @@ import { db } from "@/firebase/firebase";
 interface Guest {
   id?: string;
   name: string;
-  number?: string;
+  number?: string | null;
   checkInStatus?: string | null;
-  checkInTime?: Date | string;
+  checkInTime?: string; // Store as ISO string in Firestore
 }
 
 // Define the context type
@@ -34,15 +34,18 @@ export const GuestProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const guestsData: Guest[] = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
-          id: doc.id || '',
+          id: doc.id || "",
           name: data.name,
           number: data.number,
           checkInStatus: data.checkInStatus,
-          // Convert Firestore timestamp/string to Date object if it exists
-          checkInTime: data.checkInTime ? new Date(data.checkInTime) : undefined,
+          // Handle Firestore timestamp or string
+          checkInTime: data.checkInTime || undefined, // Keep as string for consistency
         };
       });
       setGuests(guestsData);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error in snapshot listener:", error);
       setLoading(false);
     });
 
@@ -79,23 +82,31 @@ export const GuestProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const checkInGuest = async (guestId: string) => {
     try {
       const guestRef = doc(db, "guests", guestId);
-      await updateDoc(guestRef, { checkInStatus: "checked-in" });
+      const checkInTime = new Date().toISOString(); // Store as ISO string
 
-      // Update local state optimistically (optional)
+      // Update Firestore with both status and time
+      await updateDoc(guestRef, {
+        checkInStatus: "checked-in",
+        checkInTime: checkInTime,
+      });
+
+      // Update local state optimistically
       setGuests((prevGuests) =>
         prevGuests.map((guest) =>
-          guest.id === guestId ? {
-            ...guest,
-            checkInStatus: "checked-in",
-            checkInTime: new Date()
-          } : guest
+          guest.id === guestId
+            ? {
+                ...guest,
+                checkInStatus: "checked-in",
+                checkInTime: checkInTime, // Keep as string
+              }
+            : guest
         )
       );
     } catch (error) {
       console.error("Error checking in guest:", error);
+      throw error; // Optionally rethrow to handle in UI
     }
   };
-
 
   return (
     <GuestContext.Provider value={{ guests, uploadGuests, checkInGuest, loading }}>
