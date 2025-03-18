@@ -7,6 +7,7 @@ import html2canvas from "html2canvas";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { InvitationData } from "@/types";
 import { storage } from "@/firebase/firebase";
+import LoadingPage from "./Loading";
 
 interface InvitationFormProps {
   initialData?: Partial<InvitationData>;
@@ -14,6 +15,16 @@ interface InvitationFormProps {
 }
 
 const InvitationForm: React.FC<InvitationFormProps> = ({ initialData, onSave }) => {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  })
+
   const [formData, setFormData] = useState<InvitationData>({
     eventName: initialData?.eventName || "",
     date: initialData?.date || "",
@@ -74,6 +85,10 @@ const InvitationForm: React.FC<InvitationFormProps> = ({ initialData, onSave }) 
       }
     };
   }, [backgroundImageUrl]);
+
+  if (loading) {
+    return <LoadingPage />
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

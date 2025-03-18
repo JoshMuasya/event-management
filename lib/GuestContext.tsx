@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { collection, onSnapshot, writeBatch, doc, getDocs, updateDoc } from "firebase/firestore";
+import { collection, onSnapshot, writeBatch, doc, getDocs, updateDoc, addDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
 // Define the Guest type
@@ -17,6 +17,7 @@ interface Guest {
 interface GuestContextType {
   guests: Guest[];
   uploadGuests: (newGuests: Guest[]) => Promise<void>;
+  addGuest: (guest: Guest) => Promise<void>; // New function for adding a single guest
   loading: boolean;
   checkInGuest: (guestId: string) => Promise<void>;
 }
@@ -38,8 +39,7 @@ export const GuestProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           name: data.name,
           number: data.number,
           checkInStatus: data.checkInStatus,
-          // Handle Firestore timestamp or string
-          checkInTime: data.checkInTime || undefined, // Keep as string for consistency
+          checkInTime: data.checkInTime || undefined,
         };
       });
       setGuests(guestsData);
@@ -52,7 +52,7 @@ export const GuestProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return () => unsubscribe();
   }, []);
 
-  // Function to upload a new guest list
+  // Function to upload a new guest list (replaces all existing guests)
   const uploadGuests = async (newGuests: Guest[]) => {
     try {
       const batch = writeBatch(db);
@@ -79,37 +79,52 @@ export const GuestProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
+  // New function to add a single guest without deleting existing ones
+  const addGuest = async (guest: Guest) => {
+    try {
+      const guestsRef = collection(db, "guests");
+      await addDoc(guestsRef, {
+        name: guest.name,
+        number: guest.number || null,
+        checkInStatus: null,
+      });
+      // Note: onSnapshot will automatically update the local state
+    } catch (error) {
+      console.error("Error adding guest:", error);
+      throw error;
+    }
+  };
+
   const checkInGuest = async (guestId: string) => {
     try {
       const guestRef = doc(db, "guests", guestId);
-      const checkInTime = new Date().toISOString(); // Store as ISO string
+      const checkInTime = new Date().toISOString();
 
-      // Update Firestore with both status and time
       await updateDoc(guestRef, {
         checkInStatus: "checked-in",
         checkInTime: checkInTime,
       });
 
-      // Update local state optimistically
+      // Optimistic update (optional, since onSnapshot handles it)
       setGuests((prevGuests) =>
         prevGuests.map((guest) =>
           guest.id === guestId
             ? {
                 ...guest,
                 checkInStatus: "checked-in",
-                checkInTime: checkInTime, // Keep as string
+                checkInTime: checkInTime,
               }
             : guest
         )
       );
     } catch (error) {
       console.error("Error checking in guest:", error);
-      throw error; // Optionally rethrow to handle in UI
+      throw error;
     }
   };
 
   return (
-    <GuestContext.Provider value={{ guests, uploadGuests, checkInGuest, loading }}>
+    <GuestContext.Provider value={{ guests, uploadGuests, addGuest, checkInGuest, loading }}>
       {children}
     </GuestContext.Provider>
   );

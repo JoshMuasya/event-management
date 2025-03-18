@@ -2,8 +2,24 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import LoadingPage from "./Loading";
 
 export default function DashboardHome() {
+  const [ loading, setLoading ] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  })
+
+  if (loading) {
+    return <LoadingPage />
+  }
+
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-6 py-12">
       {/* Light Gradient Background */}
