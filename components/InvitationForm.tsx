@@ -15,15 +15,15 @@ interface InvitationFormProps {
 }
 
 const InvitationForm: React.FC<InvitationFormProps> = ({ initialData, onSave }) => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setLoading(false)
-    }, 2000)
+      setLoading(false);
+    }, 2000);
 
-    return () => clearTimeout(timer)
-  })
+    return () => clearTimeout(timer);
+  }, []);
 
   const [formData, setFormData] = useState<InvitationData>({
     eventName: initialData?.eventName || "",
@@ -87,7 +87,7 @@ const InvitationForm: React.FC<InvitationFormProps> = ({ initialData, onSave }) 
   }, [backgroundImageUrl]);
 
   if (loading) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   return (
@@ -207,7 +207,7 @@ const InvitationForm: React.FC<InvitationFormProps> = ({ initialData, onSave }) 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="p-6 rounded-xl border border-[#FFD700]/40 shadow-lg"
+          className="p-6 rounded-xl border-custom-gold shadow-lg"
           style={{
             background: backgroundImageUrl
               ? `linear-gradient(135deg, ${hexToRgba(formData.colors.primary, 0.7)}, ${hexToRgba(formData.colors.secondary, 0.7)}), url(${backgroundImageUrl}) center/cover no-repeat`
